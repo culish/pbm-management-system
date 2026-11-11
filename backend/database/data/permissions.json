@@ -1,0 +1,68 @@
+{
+  "permissions": {
+    "dashboard.view": "Melihat dashboard PBM",
+    "jadwal.view": "Melihat jadwal PBM",
+    "jadwal.manage": "Mengelola jadwal PBM",
+    "ppm-cpp.view": "Melihat PPM dan CPP",
+    "ppm-cpp.manage": "Mengelola PPM dan CPP",
+    "kurikulum.view": "Melihat kurikulum IKI",
+    "kurikulum.manage": "Mengelola kurikulum IKI",
+    "rps.view": "Melihat RPS dan rubrik",
+    "rps.upload": "Mengunggah RPS dan rubrik",
+    "rps.approve": "Mengesahkan RPS dan rubrik",
+    "matriks.view": "Melihat matriks CPP-IK-MK-CPMK",
+    "matriks.manage": "Mengelola matriks CPP-IK-MK-CPMK",
+    "soal.upload": "Mengunggah soal UTS/UAS",
+    "soal.status": "Melihat status pengesahan soal",
+    "soal.authorize": "Memberi otorisasi tanda tangan soal",
+    "dokumen.view": "Melihat repositori dokumen",
+    "dokumen.manage": "Mengelola repositori dokumen",
+    "sop-lab.view": "Melihat SOP laboratorium/bengkel",
+    "sop-lab.manage": "Mengelola SOP laboratorium/bengkel",
+    "sop-k3l.view": "Melihat SOP K3L",
+    "sop-k3l.manage": "Mengelola SOP K3L",
+    "induksi.view": "Melihat safety induction",
+    "induksi.manage": "Mengelola safety induction",
+    "insiden.view": "Melihat laporan insiden K3L",
+    "insiden.report": "Melaporkan insiden K3L",
+    "insiden.manage": "Menangani laporan insiden K3L",
+    "mk-lab.view": "Melihat mata kuliah lab/bengkel",
+    "mk-lab.manage": "Mengelola mata kuliah lab/bengkel",
+    "monitoring.view": "Melihat monitoring pembelajaran",
+    "monitoring.submit": "Mengisi data monitoring pembelajaran",
+    "cpp-ukur.view": "Melihat pengukuran ketercapaian CPP",
+    "cpp-ukur.manage": "Mengelola pengukuran ketercapaian CPP",
+    "kalender.view": "Melihat kalender akademik",
+    "kalender.manage": "Mengelola kalender akademik",
+    "pmb.view": "Melihat persiapan PMB",
+    "pmb.manage": "Mengelola persiapan PMB",
+    "users.manage": "Mengelola pengguna",
+    "master-data.manage": "Mengelola data master akademik",
+    "settings.manage": "Mengelola pengaturan sistem",
+    "signature.manage": "Mengelola konfigurasi tanda tangan",
+    "audit.view": "Melihat log audit"
+  },
+  "roles": {
+    "admin": { "label": "Administrator", "permissions": ["*"] },
+    "kps": {
+      "label": "Ketua Program Studi",
+      "permissions": ["dashboard.view","jadwal.view","ppm-cpp.view","kurikulum.view","rps.view","rps.approve","matriks.view","soal.status","soal.authorize","dokumen.view","sop-lab.view","sop-k3l.view","induksi.view","insiden.view","mk-lab.view","monitoring.view","cpp-ukur.view","kalender.view","pmb.view"]
+    },
+    "dosen": {
+      "label": "Dosen",
+      "permissions": ["dashboard.view","jadwal.view","kurikulum.view","rps.view","rps.upload","matriks.view","soal.upload","soal.status","dokumen.view","sop-lab.view","sop-k3l.view","induksi.view","mk-lab.view","monitoring.view","monitoring.submit","kalender.view"]
+    },
+    "laboran": {
+      "label": "Laboran / Teknisi",
+      "permissions": ["dashboard.view","jadwal.view","sop-lab.view","sop-lab.manage","sop-k3l.view","induksi.view","induksi.manage","insiden.view","insiden.report","mk-lab.view","mk-lab.manage","dokumen.view","kalender.view"]
+    },
+    "mutu": {
+      "label": "Tim Penjaminan Mutu",
+      "permissions": ["dashboard.view","ppm-cpp.view","kurikulum.view","rps.view","matriks.view","dokumen.view","sop-lab.view","sop-k3l.view","induksi.view","insiden.view","monitoring.view","cpp-ukur.view","kalender.view","audit.view"]
+    },
+    "manajemen": {
+      "label": "Manajemen Akademik",
+      "permissions": ["dashboard.view","jadwal.view","ppm-cpp.view","kurikulum.view","monitoring.view","cpp-ukur.view","insiden.view","kalender.view","pmb.view"]
+    }
+  }
+}
