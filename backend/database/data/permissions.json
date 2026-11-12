@@ -43,7 +43,7 @@
     "audit.view": "Melihat log audit"
   },
   "roles": {
-    "admin": { "label": "Administrator", "permissions": ["*"] },
+    "admin": { "label": "Administrator", "permissions": ["*"], "except": ["soal.authorize"] },
     "kps": {
       "label": "Ketua Program Studi",
       "permissions": ["dashboard.view","jadwal.view","ppm-cpp.view","kurikulum.view","rps.view","rps.approve","matriks.view","soal.status","soal.authorize","dokumen.view","sop-lab.view","sop-k3l.view","induksi.view","insiden.view","mk-lab.view","monitoring.view","cpp-ukur.view","kalender.view","pmb.view"]

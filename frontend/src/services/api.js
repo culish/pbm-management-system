@@ -39,7 +39,7 @@ export function errorMessage(error) {
   if (status === 422 && data?.errors) {
     return Object.values(data.errors).flat()[0]
   }
-  if (status === 429) return 'Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.'
+  if (status === 429) return data?.message || 'Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.'
   if (status === 403) return data?.message || 'Anda tidak memiliki akses ke fitur ini.'
   if (status >= 500) return 'Terjadi kesalahan pada server. Coba lagi beberapa saat lagi.'
   return data?.message || 'Terjadi kesalahan. Coba lagi.'

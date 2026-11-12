@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class MataKuliah extends Model
 {
@@ -14,5 +15,12 @@ class MataKuliah extends Model
     public function programStudi(): BelongsTo
     {
         return $this->belongsTo(ProgramStudi::class);
+    }
+
+    public function pengampu(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'mata_kuliah_pengampu')
+            ->withPivot('semester_id')
+            ->withTimestamps();
     }
 }

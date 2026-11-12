@@ -24,7 +24,7 @@ class SampleDataSeeder extends Seeder
             ['nama' => 'Teknik Mesin (contoh)'],
         );
 
-        Semester::updateOrCreate(
+        $semester = Semester::updateOrCreate(
             ['tahun_ajaran' => '2026/2027', 'term' => 'ganjil'],
             ['mulai' => '2026-09-01', 'selesai' => '2027-01-31', 'is_active' => true],
         );
@@ -69,8 +69,23 @@ class SampleDataSeeder extends Seeder
                     'password' => self::DEV_PASSWORD,
                     'role_id' => Role::where('key', $role)->value('id'),
                     'is_active' => true,
+                    'program_studi_id' => in_array($role, ['kps', 'dosen'], true) ? $prodi->id : null,
                 ],
             );
+        }
+
+        // Pembagian pengampu contoh untuk semester aktif. Otorisasi tanda tangan KPS
+        // sengaja tidak di-seed: KPS harus memberikannya sendiri lewat aplikasi.
+        $pengampu = [
+            'dosen1@pbm.test' => ['TM101', 'TM102', 'TM202', 'TM301', 'TM303', 'TM501'],
+            'dosen2@pbm.test' => ['TM103', 'TM201', 'TM203', 'TM302', 'TM401', 'TM402'],
+        ];
+
+        foreach ($pengampu as $email => $kodes) {
+            $user = User::where('email', $email)->first();
+            foreach (MataKuliah::whereIn('kode', $kodes)->get() as $mk) {
+                $mk->pengampu()->syncWithoutDetaching([$user->id => ['semester_id' => $semester->id]]);
+            }
         }
     }
 }

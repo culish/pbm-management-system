@@ -1,7 +1,9 @@
 import { createVuetify } from 'vuetify'
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
+import { id, en } from 'vuetify/locale'
 
 export default createVuetify({
+  locale: { locale: 'id', fallback: 'en', messages: { id, en } },
   icons: { defaultSet: 'mdi', aliases, sets: { mdi } },
   theme: {
     defaultTheme: 'pbm',
@@ -26,5 +28,9 @@ export default createVuetify({
     VBtn: { rounded: 'lg', style: 'text-transform: none; letter-spacing: 0;' },
     VCard: { rounded: 'lg', elevation: 0, border: true },
     VTextField: { variant: 'outlined', density: 'comfortable' },
+    VSelect: { variant: 'outlined', density: 'comfortable' },
+    VAutocomplete: { variant: 'outlined', density: 'comfortable' },
+    VFileInput: { variant: 'outlined', density: 'comfortable' },
+    VTextarea: { variant: 'outlined', density: 'comfortable' },
   },
 })

@@ -20,12 +20,38 @@ const routes = [
         meta: { title: 'Dashboard PBM', permission: 'dashboard.view', crumbs: [{ title: 'Dashboard PBM' }] },
       },
       {
+        path: 'soal',
+        name: 'soal',
+        component: () => import('@/views/SoalView.vue'),
+        meta: {
+          title: 'Soal UTS/UAS',
+          permission: ['soal.upload', 'soal.status', 'soal.authorize', 'dokumen.manage'],
+          crumbs: [{ title: 'Ujian dan Dokumen' }, { title: 'Soal UTS/UAS' }],
+        },
+      },
+      {
+        path: 'otorisasi-ttd',
+        name: 'otorisasi-ttd',
+        component: () => import('@/views/OtorisasiTtdView.vue'),
+        meta: {
+          title: 'Otorisasi Tanda Tangan',
+          permission: ['soal.authorize', 'signature.manage'],
+          crumbs: [{ title: 'Ujian dan Dokumen' }, { title: 'Otorisasi Tanda Tangan' }],
+        },
+      },
+      {
         path: 'akses-ditolak',
         name: 'forbidden',
         component: () => import('@/views/ForbiddenView.vue'),
         meta: { title: 'Akses ditolak', crumbs: [{ title: 'Akses ditolak' }] },
       },
     ],
+  },
+  {
+    path: '/verifikasi/:kode?',
+    name: 'verifikasi',
+    component: () => import('@/views/VerifikasiView.vue'),
+    meta: { title: 'Verifikasi Dokumen' },
   },
   {
     path: '/:pathMatch(.*)*',

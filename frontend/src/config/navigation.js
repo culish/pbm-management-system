@@ -14,6 +14,7 @@ import {
   mdiChartLine,
   mdiCalendarMonthOutline,
   mdiSchoolOutline,
+  mdiDrawPen,
 } from '@mdi/js'
 
 /**
@@ -42,8 +43,18 @@ export const navGroups = [
   {
     title: 'Ujian dan Dokumen',
     items: [
-      { title: 'Upload Soal UTS/UAS', icon: mdiFileSign, permission: 'soal.upload' },
-      { title: 'Status Soal UTS/UAS', icon: mdiFileSign, permission: 'soal.status' },
+      {
+        title: 'Soal UTS/UAS',
+        icon: mdiFileSign,
+        to: '/soal',
+        permission: ['soal.upload', 'soal.status', 'soal.authorize', 'dokumen.manage'],
+      },
+      {
+        title: 'Otorisasi Tanda Tangan',
+        icon: mdiDrawPen,
+        to: '/otorisasi-ttd',
+        permission: ['soal.authorize', 'signature.manage'],
+      },
       { title: 'Repositori Dokumen', icon: mdiFolderOutline, permission: 'dokumen.view' },
     ],
   },

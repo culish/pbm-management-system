@@ -21,8 +21,9 @@ class RolePermissionSeeder extends Seeder
         foreach ($matrix['roles'] as $key => $definition) {
             $role = Role::updateOrCreate(['key' => $key], ['label' => $definition['label']]);
 
+            // "*" berarti semua izin, dikurangi yang tercantum di "except".
             $ids = in_array('*', $definition['permissions'], true)
-                ? $allIds->values()->all()
+                ? $allIds->except($definition['except'] ?? [])->values()->all()
                 : collect($definition['permissions'])->map(fn ($p) => $allIds[$p])->all();
 
             $role->permissions()->sync($ids);
