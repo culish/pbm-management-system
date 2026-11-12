@@ -11,8 +11,10 @@ export const useAuthStore = defineStore('auth', {
     permissions: (state) => state.user?.permissions ?? [],
   },
   actions: {
+    /** Menerima satu kunci izin atau daftar kunci; daftar berarti cukup salah satu. */
     can(permission) {
-      return this.permissions.includes(permission)
+      const keys = Array.isArray(permission) ? permission : [permission]
+      return keys.some((key) => this.permissions.includes(key))
     },
     async login(email, password) {
       const { data } = await api.post('/auth/login', { email, password })

@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = ['name', 'email', 'password', 'role_id', 'nip', 'is_active'];
+    protected $fillable = ['name', 'email', 'password', 'role_id', 'program_studi_id', 'nip', 'is_active'];
 
     protected $hidden = ['password', 'remember_token'];
 
@@ -29,6 +29,11 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function programStudi(): BelongsTo
+    {
+        return $this->belongsTo(ProgramStudi::class);
     }
 
     public function permissionKeys(): array

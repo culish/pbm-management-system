@@ -18,6 +18,10 @@ body {
   font-family: 'Plus Jakarta Sans Variable', system-ui, sans-serif !important;
 }
 
+a {
+  color: var(--pbm-blue);
+}
+
 .text-muted {
   color: var(--pbm-muted);
 }

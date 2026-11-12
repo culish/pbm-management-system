@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Document;
+use App\Models\ExamSubmission;
 use App\Models\MataKuliah;
 use App\Models\Semester;
 use App\Models\User;
@@ -51,7 +52,33 @@ class DashboardController extends Controller
                 'status' => $s,
                 'total' => (int) ($perStatus[$s] ?? 0),
             ])->values(),
+            'soal_semester_aktif' => $this->examSummary($semester),
             'aktivitas_terbaru' => $aktivitas,
         ]);
+    }
+
+    /**
+     * Status soal UTS/UAS semester aktif. Hanya versi terbaru tiap mata kuliah dan jenis ujian yang dihitung.
+     */
+    private function examSummary(?Semester $semester): array
+    {
+        $counts = collect(ExamSubmission::EXAM_TYPES)->mapWithKeys(fn ($t) => [$t => array_fill_keys(ExamSubmission::STATUSES, 0)])->all();
+
+        if (! $semester) {
+            return ['per_jenis' => $counts, 'mata_kuliah_aktif' => 0];
+        }
+
+        $latest = ExamSubmission::query()
+            ->where('semester_id', $semester->id)
+            ->whereRaw('version = (select max(e2.version) from exam_submissions e2 where e2.mata_kuliah_id = exam_submissions.mata_kuliah_id and e2.semester_id = exam_submissions.semester_id and e2.exam_type = exam_submissions.exam_type)')
+            ->get(['exam_type', 'status']);
+
+        foreach ($latest as $row) {
+            $counts[$row->exam_type][$row->status]++;
+        }
+
+        $aktif = MataKuliah::whereHas('pengampu', fn ($q) => $q->where('mata_kuliah_pengampu.semester_id', $semester->id))->count();
+
+        return ['per_jenis' => $counts, 'mata_kuliah_aktif' => $aktif];
     }
 }

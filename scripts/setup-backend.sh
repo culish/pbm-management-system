@@ -2,27 +2,32 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-TMP="$(mktemp -d)"
-trap 'rm -rf "$TMP"' EXIT
+cd "$ROOT/backend"
 
-for bin in php composer rsync; do
-  command -v "$bin" >/dev/null || { echo "Perlu $bin terpasang (PHP 8.2+)."; exit 1; }
+for bin in php composer; do
+  command -v "$bin" >/dev/null || { echo "Perlu $bin terpasang (PHP 8.3+)."; exit 1; }
 done
 
-composer create-project laravel/laravel "$TMP/app" --no-interaction
-(
-  cd "$TMP/app"
-  composer require laravel/sanctum --no-interaction
-  php artisan install:api --no-interaction
-)
+missing=()
+for bin in soffice pdftotext qpdf; do
+  command -v "$bin" >/dev/null || missing+=("$bin")
+done
 
-rsync -a --ignore-existing "$TMP/app/" "$ROOT/backend/"
+composer install --no-interaction
 
-cd "$ROOT/backend"
-[ -f .env ] || cp .env.example .env
-php artisan key:generate --ansi
+if [ ! -f .env ]; then
+  cp .env.example .env
+fi
+if ! grep -q '^APP_KEY=base64' .env; then
+  php artisan key:generate --ansi
+fi
 
 echo
-echo "Kerangka Laravel siap di backend/."
-echo "Selanjutnya: isi DB_PASSWORD di backend/.env, lalu jalankan:"
+echo "Backend siap. Isi DB_USERNAME dan DB_PASSWORD di backend/.env, lalu jalankan:"
 echo "  cd backend && php artisan migrate --seed && php artisan serve"
+
+if [ ${#missing[@]} -gt 0 ]; then
+  echo
+  echo "Peringatan: alat berikut belum terpasang: ${missing[*]}"
+  echo "Modul pengesahan soal membutuhkannya (Debian/Ubuntu: sudo apt install libreoffice-writer poppler-utils qpdf)."
+fi

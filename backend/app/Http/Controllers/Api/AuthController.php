@@ -9,18 +9,31 @@ use App\Support\Audit;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     private const TOKEN_LIFETIME_HOURS = 8;
 
+    private const MAX_FAILED_ATTEMPTS = 5;
+
     public function login(LoginRequest $request): JsonResponse
     {
         $email = $request->string('email')->toString();
+
+        // Dibatasi per email + IP, bukan per IP saja: banyak pengguna kampus berbagi satu IP NAT.
+        $throttleKey = 'login:'.mb_strtolower($email).'|'.$request->ip();
+        if (RateLimiter::tooManyAttempts($throttleKey, self::MAX_FAILED_ATTEMPTS)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+
+            return response()->json(['message' => "Terlalu banyak percobaan masuk. Coba lagi dalam {$seconds} detik."], 429);
+        }
+
         $user = User::with('role')->where('email', $email)->first();
 
         if (! $user || ! Hash::check($request->string('password')->toString(), $user->password)) {
+            RateLimiter::hit($throttleKey, 60);
             Audit::record('auth.login_failed', null, ['email' => $email]);
 
             throw ValidationException::withMessages([
@@ -34,6 +47,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Akun dinonaktifkan. Hubungi administrator.'], 403);
         }
 
+        RateLimiter::clear($throttleKey);
         $user->forceFill(['last_login_at' => now()])->save();
 
         $token = $user->createToken('spa', ['*'], now()->addHours(self::TOKEN_LIFETIME_HOURS));
